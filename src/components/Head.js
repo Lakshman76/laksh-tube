@@ -1,18 +1,30 @@
 import React from "react";
+import logo from "../assets/images/LakshTube-logo.png";
 import {
   RxHamburgerMenu,
   PiMagnifyingGlass,
   MdNotificationsNone,
   FaRegCircleUser,
 } from "../utils/ReactIcons";
-import logo from "../assets/images/laksh-tube.png";
+import { useDispatch } from "react-redux";
+import { toggleMenu } from "../utils/sidenavSlice";
 
 const Head = () => {
+  const dispatch = useDispatch();
+  const toggleMenuHandler = () => {
+    dispatch(toggleMenu());
+  };
+
   return (
-    <div className="grid grid-flow-col p-4 shadow-lg">
+    <div className="w-full bg-white grid grid-flow-col p-4 shadow-lg z-10 fixed">
       <div className="flex items-center gap-8 col-span-1">
-        <RxHamburgerMenu className="w-8 h-6" />
-        <img className="h-10" src={logo} alt="youtube-logo" />
+        <RxHamburgerMenu
+          onClick={() => toggleMenuHandler()}
+          className="w-8 h-6 cursor-pointer"
+        />
+        <a href="/">
+          <img className="h-10" src={logo} alt="youtube-logo" />
+        </a>
       </div>
       <div className="flex justify-center items-center col-span-8">
         <input
