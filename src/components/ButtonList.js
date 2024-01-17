@@ -21,7 +21,7 @@ const ButtonList = () => {
   return (
     <div className="flex overflow-x-auto">
       {btnList.map((list) => (
-        <Button name={list} />
+        <Button name={list} key={list}/>
       ))}
       {/* <Button name='All'/>
       <Button name='Music'/>
