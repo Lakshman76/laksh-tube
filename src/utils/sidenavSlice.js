@@ -9,8 +9,11 @@ const sidenavSlice = createSlice({
     toggleMenu: (state) => {
       state.isMenuOpen = !state.isMenuOpen;
     },
+    closeMenu: (state) => {
+      state.isMenuOpen = false;
+    }
   },
 });
 
-export const { toggleMenu } = sidenavSlice.actions;
+export const { toggleMenu, closeMenu } = sidenavSlice.actions;
 export default sidenavSlice.reducer;
