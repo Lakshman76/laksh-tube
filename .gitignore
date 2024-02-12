@@ -5,6 +5,9 @@
 /.pnp
 .pnp.js
 
+# secure file
+src/utils/constant.js
+
 # testing
 /coverage
 
