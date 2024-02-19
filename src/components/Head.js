@@ -13,6 +13,7 @@ import { YOUTUBE_SEARCH_API } from "../utils/constant";
 const Head = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
+  const [showSuggestion, setShowSuggestion] = useState(false);
 
   const dispatch = useDispatch();
   const toggleMenuHandler = () => {
@@ -28,10 +29,8 @@ const Head = () => {
   }, [searchQuery]);
 
   const getSearchSuggestion = async () => {
-    // console.log(searchQuery);
     const data = await fetch(YOUTUBE_SEARCH_API + searchQuery);
     const jsonData = await data.json();
-    // console.log(jsonData);
     setSuggestions(jsonData);
   };
 
@@ -56,23 +55,26 @@ const Head = () => {
             onChange={(e) => {
               setSearchQuery(e.target.value);
             }}
+            onFocus={() => setShowSuggestion(true)}
+            onBlur={() => setShowSuggestion(false)}
           />
           <button className="p-2 border border-gray-400 rounded-r-full bg-gray-200">
             <PiMagnifyingGlass className="w-8 h-6" />
           </button>
         </div>
-        <div className="fixed mt-12 ml-[17rem] p-2 w-[38rem] bg-white border border-gray-100 shadow-lg rounded-lg ">
-          <ul className="max-h-96 overflow-y-scroll">
-            {suggestions.map((suggestion) => {
-              // console.log(suggestion.show.name);
-              return (
-                <li className="flex gap-2 items-center p-2 hover:bg-slate-200">
-                  <PiMagnifyingGlass /> {suggestion.show.name}
-                </li>
-              );
-            })}
-          </ul>
-        </div>
+        {showSuggestion && (
+          <div className="fixed mt-12 ml-[17rem] p-2 w-[38rem] bg-white border border-gray-100 shadow-lg rounded-lg ">
+            <ul className="max-h-96 overflow-y-scroll">
+              {suggestions.map((suggestion) => {
+                return (
+                  <li className="flex gap-2 items-center p-2 hover:bg-slate-200">
+                    <PiMagnifyingGlass /> {suggestion.show.name}
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        )}
       </div>
       <div className="flex justify-center items-center gap-4 col-span-2">
         <MdNotificationsNone className="w-8 h-8" />
