@@ -17,9 +17,17 @@ const ButtonList = () => {
     "Statitics",
     "Politics",
     "valentine",
+    "Stock market",
+    "Statitics",
+    "Politics",
+    "valentine",
+    "Stock market",
+    "Statitics",
+    "Politics",
+    "valentine",    
   ];
   return (
-    <div className="flex overflow-x-auto">
+    <div className="flex w-[90vw] overflow-x-scroll ">
       {btnList.map((list) => (
         <Button name={list} key={list}/>
       ))}
