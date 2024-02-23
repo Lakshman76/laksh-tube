@@ -6,9 +6,10 @@ import {
   MdNotificationsNone,
   FaRegCircleUser,
 } from "../utils/ReactIcons";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toggleMenu } from "../utils/sidenavSlice";
 import { YOUTUBE_SEARCH_API } from "../utils/constant";
+import { cacheResult } from "../utils/searchSlice";
 
 const Head = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -19,9 +20,16 @@ const Head = () => {
   const toggleMenuHandler = () => {
     dispatch(toggleMenu());
   };
+  const searchCache = useSelector((store) => store.search);
 
   useEffect(() => {
-    const timer = setTimeout(() => getSearchSuggestion(), 200);
+    const timer = setTimeout(() => {
+      if (searchCache[searchQuery]) {
+        setSuggestions(searchCache[searchQuery]);
+      } else {
+        getSearchSuggestion();
+      }
+    }, 200);
 
     return () => {
       clearTimeout(timer);
@@ -32,6 +40,11 @@ const Head = () => {
     const data = await fetch(YOUTUBE_SEARCH_API + searchQuery);
     const jsonData = await data.json();
     setSuggestions(jsonData);
+    dispatch(
+      cacheResult({
+        [searchQuery]: jsonData,
+      })
+    );
   };
 
   return (
@@ -67,7 +80,7 @@ const Head = () => {
             <ul className="max-h-96 overflow-y-scroll">
               {suggestions.map((suggestion) => {
                 return (
-                  <li className="flex gap-2 items-center p-2 hover:bg-slate-200">
+                  <li className="flex gap-2 items-center p-2 hover:bg-slate-200 " key={suggestion.show.name}>
                     <PiMagnifyingGlass /> {suggestion.show.name}
                   </li>
                 );
