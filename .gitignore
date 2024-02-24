@@ -4,6 +4,7 @@
 /node_modules
 /.pnp
 .pnp.js
+/package-lock.json
 
 # secure file
 src/utils/constant.js
