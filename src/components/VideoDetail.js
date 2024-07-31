@@ -10,7 +10,19 @@ const VideoDetail = ({ info }) => {
   // const snippet = info?.items[0]?.snippet;
   // const title = snippet?.title;
   // const channelTitle = snippet?.channelTitle;
-
+/* 
+info{
+  items{
+    snippet{
+      title{},
+      channelTitle{},
+    },
+    statistics{
+      likeCount{}
+    },
+  }
+}
+**/
   const { items } = info || {};
   const { snippet, statistics } = items && items[0] ? items[0] : {};
   const { title, channelTitle } = snippet || {};
