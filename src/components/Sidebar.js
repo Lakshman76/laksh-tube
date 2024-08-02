@@ -15,7 +15,7 @@ const Sidebar = () => {
           <Link to="/">Home</Link>
         </h1>
         <h1 className="font-medium p-1">
-          <a href="/">Shorts</a>
+          <Link to="/shorts">Shorts</Link>
         </h1>
         <h1 className="font-medium p-1">
           <a href="/">Subscriptions</a>
