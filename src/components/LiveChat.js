@@ -17,7 +17,7 @@ const LiveChat = () => {
       dispatch(
         addMessage({
           name: generateRandomName(),
-          message: generateRandomText(15) + "🙏",
+          message: generateRandomText(15),
         })
       );
     }, 2000);
@@ -45,7 +45,7 @@ const LiveChat = () => {
               message: inputMessage,
             })
           );
-          setInputMessage("")
+          setInputMessage("");
         }}
         className="w-full
        ml-2 mt-2 p-2 border border-black rounded-md flex items-center"
