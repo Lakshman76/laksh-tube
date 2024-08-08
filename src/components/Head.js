@@ -37,15 +37,23 @@ const Head = () => {
   }, [searchQuery]);
 
   const getSearchSuggestion = async () => {
-    console.log(searchQuery)
-    const data = await fetch(YOUTUBE_SEARCH_API + searchQuery);
-    const jsonData = await data.json();
-    setSuggestions(jsonData);
-    dispatch(
-      cacheResult({
-        [searchQuery]: jsonData,
-      })
-    );
+    try {
+      const response = await fetch(YOUTUBE_SEARCH_API + searchQuery);
+      console.log(response);
+      if (!response.ok) {
+        throw new Error("Network response was not ok " + response.statusText);
+      }
+      const jsonData = await response.json();
+      console.log(jsonData);
+      setSuggestions(jsonData);
+      dispatch(
+        cacheResult({
+          [searchQuery]: jsonData,
+        })
+      );
+    } catch (error) {
+      console.error("Fetch error:", error);
+    }
   };
 
   return (
@@ -79,10 +87,13 @@ const Head = () => {
         {showSuggestion && (
           <div className="fixed mt-12 ml-[17rem] p-2 w-[38rem] bg-white border border-gray-100 shadow-lg rounded-lg ">
             <ul className="max-h-96 overflow-y-scroll">
-              {suggestions.map((suggestion) => {
+              {suggestions[1].map((suggestion) => {
                 return (
-                  <li className="flex gap-2 items-center p-2 hover:bg-slate-200 " key={suggestion.show.name}>
-                    <PiMagnifyingGlass /> {suggestion.show.name}
+                  <li
+                    className="flex gap-2 items-center p-2 hover:bg-slate-200 "
+                    key={suggestion}
+                  >
+                    <PiMagnifyingGlass /> {suggestion}
                   </li>
                 );
               })}
