@@ -25,7 +25,7 @@ const LiveChat = () => {
   }, []);
   return (
     <>
-      <div className="ml-2 p-2 w-full h-[550px] border border-black bg-slate-100 rounded-lg overflow-y-scroll flex flex-col-reverse">
+      <div className="ml-6 p-2 h-[550px] border border-black bg-slate-100 rounded-lg overflow-y-scroll flex flex-col-reverse">
         {/* Don't use index as key */}
         {ChatMessages.map((chatMessage, idx) => (
           <ChatMessage
@@ -38,7 +38,6 @@ const LiveChat = () => {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          console.log(inputMessage);
           dispatch(
             addMessage({
               name: "YOU",
@@ -47,8 +46,7 @@ const LiveChat = () => {
           );
           setInputMessage("");
         }}
-        className="w-full
-       ml-2 mt-2 p-2 border border-black rounded-md flex items-center"
+        className="ml-6 mt-2 p-2 border border-black rounded-md flex gap-20"
       >
         <input
           type="text"
