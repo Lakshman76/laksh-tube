@@ -8,8 +8,9 @@ import {
 } from "../utils/ReactIcons";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleMenu } from "../utils/sidenavSlice";
-import { YOUTUBE_SEARCH_API } from "../utils/constant";
-import { cacheResult } from "../utils/searchSlice";
+import getSearchSuggestion from "../utils/getSearchSuggestion";
+import getVideoBySearch from "../utils/getVideoBySearch";
+import { Link } from "react-router-dom";
 
 const Head = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -27,7 +28,7 @@ const Head = () => {
       if (searchCache[searchQuery]) {
         setSuggestions(searchCache[searchQuery]);
       } else {
-        getSearchSuggestion();
+        getSearchSuggestion(searchQuery, setSuggestions, dispatch);
       }
     }, 200);
 
@@ -36,26 +37,6 @@ const Head = () => {
     };
   }, [searchQuery]);
 
-  const getSearchSuggestion = async () => {
-    try {
-      const response = await fetch(YOUTUBE_SEARCH_API + searchQuery);
-      console.log(response);
-      if (!response.ok) {
-        throw new Error("Network response was not ok " + response.statusText);
-      }
-      const jsonData = await response.json();
-      console.log(jsonData);
-      setSuggestions(jsonData);
-      dispatch(
-        cacheResult({
-          [searchQuery]: jsonData,
-        })
-      );
-    } catch (error) {
-      console.error("Fetch error:", error);
-    }
-  };
-
   return (
     <div className="w-full bg-white grid grid-flow-col p-4 shadow-lg z-10 fixed">
       <div className="flex items-center gap-8 col-span-1">
@@ -63,9 +44,9 @@ const Head = () => {
           onClick={() => toggleMenuHandler()}
           className="w-8 h-6 cursor-pointer"
         />
-        <a href="/">
+        <Link to="/">
           <img className="h-10" src={logo} alt="youtube-logo" />
-        </a>
+        </Link>
       </div>
       <div className="flex flex-col col-span-9">
         <div className="w-full flex justify-center items-center">
@@ -78,23 +59,39 @@ const Head = () => {
               setSearchQuery(e.target.value);
             }}
             onFocus={() => setShowSuggestion(true)}
-            onBlur={() => setShowSuggestion(false)}
+            // onBlur={() => setShowSuggestion(false)}
           />
-          <button className="p-2 border border-gray-400 rounded-r-full bg-gray-200">
-            <PiMagnifyingGlass className="w-8 h-6" />
-          </button>
+          <Link to={`/search?q=${searchQuery}`}>
+            <button
+              className="p-2 border border-gray-400 rounded-r-full bg-gray-200"
+              onClick={() => {
+                setSearchQuery(searchQuery);
+                setShowSuggestion(false);
+                getVideoBySearch(searchQuery, dispatch);
+              }}
+            >
+              <PiMagnifyingGlass className="w-8 h-6" />
+            </button>
+          </Link>
         </div>
         {showSuggestion && (
           <div className="fixed mt-12 ml-[17rem] p-2 w-[38rem] bg-white border border-gray-100 shadow-lg rounded-lg ">
             <ul className="max-h-96 overflow-y-scroll">
               {suggestions[1].map((suggestion) => {
                 return (
-                  <li
-                    className="flex gap-2 items-center p-2 hover:bg-slate-200 "
-                    key={suggestion}
-                  >
-                    <PiMagnifyingGlass /> {suggestion}
-                  </li>
+                  <Link to={`/search?q=${searchQuery}`}>
+                    <li
+                      className="flex gap-2 items-center p-2 hover:bg-slate-200 cursor-pointer"
+                      key={suggestion}
+                      onClick={() => {
+                        setSearchQuery(suggestion);
+                        setShowSuggestion(false);
+                        getVideoBySearch(suggestion, dispatch);
+                      }}
+                    >
+                      <PiMagnifyingGlass /> {suggestion}
+                    </li>
+                  </Link>
                 );
               })}
             </ul>
