@@ -7,9 +7,9 @@ import VideoDetail from "./VideoDetail";
 import CommentsContainer from "./CommentsContainer";
 import LiveChat from "./LiveChat";
 
-const WatchPage = () => {
+const WatchPage = ({id}) => {
   const [searchParam] = useSearchParams();
-  const searchVideoId = searchParam.get("v");
+  const searchVideoId = (!id ? searchParam.get("v") : id) ;
 
   const [videoInfo, setVideoInfo] = useState();
   const API = `https://youtube.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&id=${searchVideoId}&key=${GOOGLE_API_KEY}`;
